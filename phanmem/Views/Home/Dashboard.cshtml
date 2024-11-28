@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* .title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }*/
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        text-align: center;
+        padding: 5px;
+    }
+
+        .card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .text {
+        font-size: 0.8rem;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<body>
+    <div class="container my-5">
+        
+        <div class="grid">
+            <div class="card">
+                <a href="@Url.Action("Index", "Accounts")">
+                    <div class="icon">
+                        <i class="fas fa-user-cog"></i> <!-- Biểu tượng quản lý tài khoản -->
+                    </div>
+                    <span class="text">Quản lí tài khoản</span>
+                </a>
+            </div>
+            <div class="card">
+                <a href="@Url.Action("Index", "KhuVucs")">
+                    <!-- Biểu tượng khu vực -->
+                    <div class="icon">
+                        <i class="fas fa-map-marker-alt"></i> <!-- Biểu tượng bản đồ -->
+                    </div>
+                    <span class="text"> Quản lí khu vực</span>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="@Url.Action("Index", "DaiHois")">
+                    <!-- Biểu tượng khu vực -->
+                    <div class="icon">
+                        <i class="fas fa-map-marker-alt"></i> <!-- Biểu tượng bản đồ -->
+                    </div>
+                    <span class="text"> Quản lí đại hội</span>
+                </a>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</body>

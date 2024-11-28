@@ -1,0 +1,52 @@
+﻿@model List<v2kp.Models.PhieuBauViewModel>
+
+@{
+    ViewBag.Title = "Xóa Phiếu Bầu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Xóa phiếu bầu</h2>
+
+<p>Bạn có chắc chắn muốn xóa phiếu bầu này không?</p>
+
+@using (Html.BeginForm("DeleteConfirmed", "PhieuBaus", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="iddaihoi" value="@ViewBag.IDDaiHoi" />
+    <input type="hidden" name="idkhuvuc" value="@ViewBag.IDKhuVuc" />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên ứng cử viên</th>
+                @*<th>Khu Vực</th>
+                <th>Đại Hội</th>*@
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.ID)</td>
+                    <td>@Html.DisplayFor(m => item.TenUngCuVien)</td>
+                    @*<td>@Html.DisplayFor(m => item.KhuVuc)</td>
+                    <td>@Html.DisplayFor(m => item.IDDaiHoi)</td>*@
+                    <td>
+                        <span class="badge @(item.IsChecked ? "bg-success ": "bg-danger")" style="color: white;">
+                            @(item.IsChecked ? "Đã chọn" : "Chưa chọn")
+                        </span>
+                    </td>
+                </tr>
+                <input type="hidden" name="idphieu" value="@item.ID" />
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        @Html.ActionLink("Hủy", "Index", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc }, new { @class = "btn btn-default" })
+    </div>
+}

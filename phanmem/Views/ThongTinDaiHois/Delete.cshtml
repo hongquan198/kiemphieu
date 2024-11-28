@@ -1,0 +1,153 @@
+﻿@model v2kp.Models.ThongTinDaiHoi
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ThongTinDaiHoi</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CongressType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CongressType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfVoters)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfVoters)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalDelegates)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalDelegates)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DelegatesPresent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DelegatesPresent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DelegatesPresentOfficial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DelegatesPresentOfficial)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialDelegatesPresent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialDelegatesPresent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DelegatesDisqualified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DelegatesDisqualified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialDelegatesDisqualified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialDelegatesDisqualified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DelegatesAbsent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DelegatesAbsent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialDelegatesAbsent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialDelegatesAbsent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DelegatesPresentDuringVoting)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DelegatesPresentDuringVoting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialDelegatesPresentDuringVoting)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialDelegatesPresentDuringVoting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoPhieuPhatRa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoPhieuPhatRa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoPhieuThuVao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoPhieuThuVao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoPhieuHopLe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoPhieuHopLe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoPhieuKhongHopLe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoPhieuKhongHopLe)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

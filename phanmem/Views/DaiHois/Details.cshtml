@@ -1,0 +1,43 @@
+﻿@model v2kp.Models.DaiHoi
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DaiHoi</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenDaiHoi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenDaiHoi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KhuVuc.KhuVuc1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KhuVuc.KhuVuc1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThongTinDaiHoi.CongressType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThongTinDaiHoi.CongressType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,56 @@
+﻿@model v2kp.Models.Account
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h3 class="text-danger">Bạn có chắc chắn muốn xóa tài khoản này?</h3>
+    <div class="alert alert-warning">
+        <strong>Cảnh báo!</strong> Bạn đang thực hiện thao tác xóa tài khoản này. Thao tác này không thể hoàn tác.
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-md-3">Tên đăng nhập</dt>
+                <dd class="col-md-9">@Html.DisplayFor(model => model.UserID)</dd>
+
+                <dt class="col-md-3">Tên hiển thị</dt>
+                <dd class="col-md-9">@Html.DisplayFor(model => model.UserName)</dd>
+
+                <dt class="col-md-3">Mật khẩu</dt>
+                <dd class="col-md-9">@Html.DisplayFor(model => model.PassWord)</dd>
+
+                <dt class="col-md-3">Email</dt>
+                <dd class="col-md-9">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-md-3">Vai trò</dt>
+                <dd class="col-md-9">@Html.DisplayFor(model => model.Role)</dd>
+
+                <dt class="col-md-3">Khu vực</dt>
+                <dd class="col-md-9">
+                    @if (ViewBag.KhuVucNames != null && ViewBag.KhuVucNames.ContainsKey(Model.KhuVuc))
+                    {
+                        @ViewBag.KhuVucNames[Model.KhuVuc]
+                    }
+                    else
+                    {
+                        @:Quản lý
+                    }
+                            </dd>
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger  btn-sm" onclick="return confirm('Bạn chắc chắn muốn xóa tài khoản này không?')">Xóa</button>
+                    <a href="@Url.Action("Index", "Accounts")" class="btn btn-secondary  btn-sm">Quay lại danh sách</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

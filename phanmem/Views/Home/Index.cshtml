@@ -1,0 +1,372 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #888;
+        margin-bottom: 30px;
+    }
+
+    .grid {
+        display: flex;
+        gap: 20px;
+        justify-content: space-around;
+        margin-bottom: 40px;
+    }
+
+    .card {
+        flex: 1;
+        padding: 20px;
+        color: white;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.2s ease;
+        min-width: 220px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-blue {
+        background-color: #007bff;
+    }
+
+    .card-purple {
+        background-color: #6f42c1;
+    }
+
+    .card-orange {
+        background-color: #fd7e14;
+    }
+
+    .icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .card-description {
+        font-size: 0.9rem;
+    }
+
+    .other-functions {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .function-grid {
+        display: grid; /* Sử dụng CSS Grid */
+        grid-template-columns: repeat(2, 1fr); /* Chia thành 3 cột đều */
+        gap: 20px; /* Khoảng cách giữa các phần tử */
+        margin-bottom: 30px;
+    }
+
+    .function-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        .function-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .function-card .icon {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+    .stats {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .stat-card {
+        flex: 1;
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .card:hover .card-title,
+    .card:hover .card-description {
+        color: white; /* Đổi màu chữ thành trắng khi hover */
+    }
+
+    .btn-back {
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        @if (Session["KhuVuc"] != null && Session["KhuVuc"].ToString() == "0" && Session["Role"] != null && Session["Role"].ToString() == "Admin")
+        {
+            <a href="@Url.Action("Index", "DaiHois")" class="btn-back">
+                Quay lại
+            </a>
+        }
+        else
+        {
+            <a href="@Url.Action("Index", "DaiHois", new { id = ViewBag.IDKhuVuc })" class="btn-back">
+                Quay lại
+            </a>
+
+        }
+
+
+        <h1 class="title">@ViewBag.TenDaiHoi</h1>
+        <div class="grid">
+            @if (Session["Role"]?.ToString() == "Admin")
+            {
+                <div class="card card-blue">
+                    <a href="@Url.Action("Index", "UngCuViens", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })">
+                        <div class="icon">📋</div>
+                        <div class="card-title">Danh sách ứng cử viên</div>
+                        <div class="card-description">Quản lý thông tin ứng viên</div>
+                    </a>
+                </div>
+                <div class="card card-purple">
+                    <a href="@Url.Action("Index", "UyViens", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })">
+                        <div class="icon">📋</div>
+                        <div class="card-title">Danh sách ban kiểm phiếu</div>
+                        <div class="card-description">Quản lý thông tin ban kiểm phiếu</div>
+                    </a>
+                </div>
+            }
+            else
+            {
+                <!-- Các chức năng hiển thị cho người dùng không phải admin -->
+                <div class="card card-blue" id="cardUngCuVien">
+                    <div class="icon">📋</div>
+                    <div class="card-title">Danh sách ứng cử viên</div>
+                    <div class="card-description">Quản lý thông tin ứng viên</div>
+                </div>
+                <div class="card card-purple" id="cardUyVien">
+                    <div class="icon">📋</div>
+                    <div class="card-title">Danh sách ban kiểm phiếu</div>
+                    <div class="card-description">Quản lý thông tin ban kiểm phiếu</div>
+                </div>
+            }
+            <div class="card card-orange">
+                <a href="@Url.Action("Index", "PhieuBaus", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })">
+                    <div class="icon">📜</div>
+                    <div class="card-title">Danh sách phiếu bầu</div>
+                    <div class="card-description">Quản lí thông tin phiếu bầu</div>
+                </a>
+            </div>
+        </div>
+        <h2 class=" font-weight-bold text-uppercase mb-3 border-bottom pb-2" style="border-color: #007bff;">
+            Các chức năng khác
+        </h2>
+
+        <div class="function-grid">
+            @*<a href="@Url.Action("Create", "ThongTinBaoCaos", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">📝</div>
+                    <div>Nhập báo cáo kết quả kiểm phiếu</div>
+                </a>
+                <a href="@Url.Action("Index", "ThongTinBaoCaos", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">📊</div>
+                    <div>Báo cáo kết quả kiểm phiếu</div>
+                </a>
+                <a href="@Url.Action("Create", "ThongTinDaiHois", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">ℹ️</div>
+                    <div>Nhập thông tin đại biểu dự đại hội</div>
+                </a>
+                <a href="@Url.Action("Index", "ThongTinDaiHois", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">📋</div>
+                    <div>Thông tin đại biểu dự đại hội</div>
+                </a>*@
+            @*<a href="@Url.Action("Create", "ThongTinBaoCaoDaiHoi", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">📋</div>
+                    <div>Nhập thông tin đại hội</div>
+                </a>*@
+
+           @if (Session["Role"]?.ToString() == "Admin")
+            {
+                <a href="@Url.Action("Index", "ThongTinBaoCaoDaiHoi", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+                    <div class="icon">📋</div>
+                    <div>Thông tin đại hội</div>
+                </a>
+            }
+            else
+            {
+                <!-- For non-admins, just show the card without a link -->
+                <div class="function-card" id="noAccessThongTinBaoCao">
+                    <div class="icon">📋</div>
+                    <div>Thông tin đại hội</div>
+                </div>
+            }
+
+            <a href="@Url.Action("NhapPhieuBau", "PhieuBaus", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="function-card">
+
+                <div class="icon">🗳️</div>
+                <div>Nhập phiếu bầu</div>
+            </a>
+
+        </div>
+
+
+
+
+
+
+        <!--<div class="stats mb-4">-->
+        @*<div class="stat-card">
+                <div class="stat-number" style="font-size:27px">@ViewBag.LoaiDaiDoi</div>
+                <div class="stat-label">Loại đại hội</div>
+            </div>*@
+        <!--<div class="stat-card">
+                <div class="stat-number">@ViewBag.SoPhieu</div>
+                <div class="stat-label">Phiếu đã nhập</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.SoUCV</div>
+                <div class="stat-label">Ứng cử viên</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.SoUV</div>
+                <div class="stat-label">Ban kiểm phiếu</div>
+            </div>
+        </div>-->
+
+
+
+        <div class="stats">
+            @*số người tham gia*@
+
+            <div class="stat-card">
+                <div class="stat-number">
+                    @(
+            (ViewBag.giaTri1 != null && ViewBag.giaTri2 == null
+                ? (ViewBag.giaTri1 > 0 ? ViewBag.giaTri1 : 0)
+                : ((ViewBag.giaTri2 ?? 0) > 0 ? ViewBag.giaTri2 : 0))
+        )
+                </div>
+                <div class="stat-label">Số người tham gia</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.SoPhieuPhatRa</div>
+                <div class="stat-label">Số phiếu phát ra</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.SoPhieuThuVao</div>
+                <div class="stat-label">Số phiếu thu vào</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.SoPhieuHopLe</div>
+                <div class="stat-label">Số phiếu hợp lệ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@ViewBag.PhieuKhongHopLe</div>
+                <div class="stat-label">Số phiếu không hợp lệ</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+<div id="noAccessModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lỗi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn không có quyền truy cập vào chức năng này.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to manually close the modal
+    function closeModal() {
+        $('#noAccessModal').modal('hide'); // Hide the modal
+    }
+
+    // Show modal (as in the previous example)
+    function showNoAccessMessage(event) {
+        event.preventDefault();
+        $('#noAccessModal').modal('show'); // Show the modal
+    }
+   
+    // Add event listeners for cards when role is not admin
+    document.getElementById('cardUngCuVien').addEventListener('click', showNoAccessMessage);
+    document.getElementById('cardUyVien').addEventListener('click', showNoAccessMessage);
+    document.getElementById('noAccessThongTinBaoCao').addEventListener('click', showNoAccessMessage);
+</script>

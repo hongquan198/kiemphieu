@@ -1,0 +1,208 @@
+﻿@*@model IEnumerable<v2kp.Models.Account>*@
+@model PagedList.IPagedList<v2kp.Models.Account>
+
+@{
+    ViewBag.Title = "Danh sách tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Tạo mới -->
+<div class="d-flex justify-content-between mt-4">
+    <!-- Nút Tạo mới -->
+    <form method="get" action="@Url.Action("Create")" style="display:inline;">
+        <button type="submit" class="btn btn-primary mb-2">
+            Tạo mới
+        </button>
+    </form>
+
+    <!-- Nút Quay lại và Tìm kiếm -->
+    <div class="d-flex align-items-center">
+        <!-- Form Tìm kiếm -->
+        <form method="get" action="@Url.Action("Index")" class="d-flex mb-2">
+            <input type="text" name="searchID" class="form-control me-2" placeholder="Tìm kiếm..." value="@Request["searchID"]" style="max-width: 300px;">
+            <button type="submit" class="btn btn-success" style="width: 150px;">
+                Tìm kiếm
+            </button>
+        </form>
+
+        <!-- Nút Quay lại -->
+        @*<a href="@Url.Action("Index", "DaiHois")" class="btn btn-secondary mb-2 ms-2">
+            Quay lại
+        </a>*@
+    </div>
+</div>
+
+
+
+@*<form method="get" action="@Url.Action("Create")" style="display:inline;">
+        <button type="submit" class="btn btn-primary">
+            Tạo mới
+        </button>
+    </form>*@
+
+
+<!-- Bảng thông tin tài khoản -->
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>STT</th>
+            <th>Tên đăng nhập</th>
+            <th>Tên hiển thị</th>
+            <th>Mật khẩu</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Khu vực</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserID)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.PassWord)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Role)</td>
+                <td>
+                    @if (ViewBag.KhuVucNames != null && ViewBag.KhuVucNames.ContainsKey(item.KhuVuc))
+                    {
+                        @ViewBag.KhuVucNames[item.KhuVuc]
+                    }
+                    else
+                    {
+                        @:Quản lý
+                    }
+                </td>
+                <td>
+
+                    <!-- Các nút chức năng -->
+                    <a href="@Url.Action("Edit", "Accounts", new { id = item.ID, idkhuvuc = item.KhuVuc })"
+                       class="btn btn-warning btn-sm"
+                       title="Sửa tài khoản">
+                        Sửa
+                    </a>
+
+
+
+
+                    <a href="@Url.Action("Delete", new { id = item.ID, khuvuc = item.KhuVuc })"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">
+                        Xóa
+                    </a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between  ">
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm justify-content-center">
+                <!-- Nút Previous (Trước) -->
+                <li class="page-item @((Model.HasPreviousPage) ? "" : "disabled")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">Previous</a>
+                </li>
+
+                <!-- Các số trang -->
+                @if (Model.PageCount <= 5)
+                {
+                    <!-- Nếu tổng số trang ít hơn hoặc bằng 5, hiển thị tất cả -->
+                    for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @((i == Model.PageNumber) ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <!-- Nếu số trang nhiều hơn 5, hiển thị các trang đầu, trang cuối và dấu ba chấm -->
+                    if (Model.PageNumber <= 3)
+                    {
+                        for (int i = 1; i <= 3; i++)
+                        {
+                            <li class="page-item @((i == Model.PageNumber) ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@Model.PageCount</a>
+                        </li>
+                    }
+                    else if (Model.PageNumber >= Model.PageCount - 2)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = 1, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">1</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        for (int i = Model.PageCount - 2; i <= Model.PageCount; i++)
+                        {
+                            <li class="page-item @((i == Model.PageNumber) ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = 1, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">1</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        for (int i = Model.PageNumber - 2; i <= Model.PageNumber + 2; i++)
+                        {
+                            <li class="page-item @((i == Model.PageNumber) ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">@Model.PageCount</a>
+                        </li>
+                    }
+                }
+
+                <!-- Nút Next (Sau) -->
+                <li class="page-item @((Model.HasNextPage) ? "" : "disabled")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1, iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc, searchID = Request["searchID"] })">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<style>
+    /* Đảm bảo dấu ba chấm có cùng kích thước và kiểu dáng với các số trang */
+    .page-dots {
+        font-size: 1rem; /* Giữ kích thước giống như các số trang */
+        font-weight: 400; /* Đảm bảo độ dày chữ tương tự */
+        line-height: 1.5; /* Đảm bảo line-height phù hợp */
+        padding: 0.375rem 0.75rem; /* Padding giống như các nút trang */
+        display: inline-block; /* Giữ hiển thị giống như nút trang */
+        background-color: #fff; /* Màu nền trắng giống nút trang */
+        border: 1px solid #dee2e6; /* Biên giới như các nút trang */
+        border-radius: 0.25rem; /* Viền tròn như các nút trang */
+        color: #007bff; /* Màu chữ giống các nút trang */
+    }
+
+        .page-dots:hover {
+            text-decoration: none; /* Không có gạch dưới khi hover */
+            background-color: #f8f9fa; /* Nền sáng hơn khi hover */
+            color: #0056b3; /* Màu chữ đậm hơn khi hover */
+        }
+</style>
+

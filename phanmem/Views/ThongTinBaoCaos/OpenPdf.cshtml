@@ -1,0 +1,19 @@
+﻿@model string
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mở PDF</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            // Mở file PDF trong tab mới
+            window.open('@Url.Action("DisplayPdf", new { filePath = Model })', '_blank');
+            // Quay lại trang trước đó (hoặc thực hiện hành động khác)
+            window.history.back();
+        };
+    </script>
+</head>
+<body>
+    <p>Đang mở file PDF, vui lòng đợi...</p>
+</body>
+</html>

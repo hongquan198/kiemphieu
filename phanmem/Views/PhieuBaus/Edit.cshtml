@@ -1,0 +1,116 @@
+﻿@model List<v2kp.Models.PhieuBauViewModel>
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Edit", "PhieuBaus", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    // Thêm các trường ẩn cho iddaihoi và idkhuvuc
+    <input type="hidden" name="iddaihoi" value="@ViewBag.IDDaiHoi" />
+    <input type="hidden" name="idkhuvuc" value="@ViewBag.IDKhuVuc" />
+    <input type="hidden" name="idphieu" value="@ViewBag.IDPhieu" />
+    <input type="hidden" name="iducv" value="@ViewBag.iducv" />
+ 
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th style="width:150px">Mã phiếu bầu</th>
+                @*<th>ID ứng cử viên</th>*@
+                <th>Tên ứng cử viên</th>
+                @*<th>Khu vực</th>
+                    <th>Đại hội</th>*@
+                <th>Bỏ phiếu</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr onclick="toggleCheckbox(this)">
+                    <td>@Html.DisplayFor(m => Model[i].ID)</td>
+                    @*<td>@Html.DisplayFor(m => Model[i].IDUngCuVien)</td>*@
+                    <td>@Html.DisplayFor(m => Model[i].TenUngCuVien)</td>
+                    @*<td>@Html.DisplayFor(m => Model[i].KhuVuc)</td>
+                        <td>@Html.DisplayFor(m => Model[i].IDDaiHoi)</td>*@
+                    <td>
+                        @Html.HiddenFor(m => Model[i].ID) <!-- Đảm bảo gửi ID -->
+                        @Html.HiddenFor(m => Model[i].IDUngCuVien)
+                        @*@Html.HiddenFor(m => Model[i].KhuVuc)
+                            @Html.HiddenFor(m => Model[i].IDDaiHoi)*@
+                        <input type="checkbox" name="[@i].IsChecked" value="true" @(Model[i].IsChecked ? "checked" : "") />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group d-flex justify-content-between">
+        <!-- Quay lại Button with Icon -->
+        <div>
+            <a href="@Url.Action("Index", "PhieuBaus", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+        <!-- Lưu Button with Icon -->
+        <div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save"></i> Lưu
+            </button>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Quay lại", "Index", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })
+    </div>*@
+
+<!-- Modal Lỗi -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Lỗi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script type="text/javascript">
+        // Hiển thị modal với thông báo lỗi
+        var errorMessage = '@Html.Raw(TempData["ErrorMessage"])';
+        document.getElementById("errorMessage").innerText = errorMessage;
+        var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
+        errorModal.show();
+        
+    </script>
+}
+<script>
+    // Hàm toggle checkbox
+    function toggleCheckbox(row) {
+        // Lấy checkbox trong hàng được nhấp
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đổi trạng thái checkbox
+        }
+    }
+</script>
+

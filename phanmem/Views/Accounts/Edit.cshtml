@@ -1,0 +1,107 @@
+﻿@model v2kp.Models.Account
+
+@{
+    ViewBag.Title = "Chỉnh sửa tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>@ViewBag.Title</h3>
+            </div>
+            <div class="card-body">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
+
+                <!-- Tên đăng nhập -->
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.UserID, "Tên đăng nhập", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UserID, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Tên hiển thị -->
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.UserName, "Tên hiển thị", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Mật khẩu -->
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.PassWord, "Mật khẩu", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PassWord, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PassWord, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Role -->
+                @*<div class="form-group row">
+                    @Html.LabelFor(model => model.Role, "Vai trò", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.Role, "Vai trò", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Role, (SelectList)ViewBag.RoleList, "Chọn vai trò", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <!-- Khu vực -->
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.KhuVuc, "Khu vực", htmlAttributes: new { @class = "control-label col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.KhuVuc, (SelectList)ViewBag.KhuVucList, "Chọn khu vực", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KhuVuc, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Nút submit -->
+                <div class="form-group row">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-primary  btn-sm">Lưu</button>
+                    </div>
+                </div>
+
+                <!-- Nút quay lại -->
+                <div class="form-group row">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="button" class="btn btn-secondary  btn-sm" onclick="window.location.href='@Url.Action("Index", "Accounts")'">Quay lại danh sách</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

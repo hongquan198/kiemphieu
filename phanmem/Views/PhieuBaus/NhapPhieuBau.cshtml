@@ -1,0 +1,136 @@
+﻿@model IEnumerable<v2kp.Models.UngCuVien>
+
+@{
+    ViewBag.Title = "Nhập Phiếu Bầu";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your shared layout
+    var dh = ViewBag.IDDaiHoi;
+    var kv = ViewBag.IDKhuVuc;
+
+
+}
+
+<h2>Nhập phiếu bầu</h2>
+
+@using (Html.BeginForm("ThemPhieuBau", "PhieuBaus", FormMethod.Post))
+{
+    <input type="hidden" name="iddaihoi" value="@dh" />
+
+    // Thêm trường ẩn cho ID khu vực
+    <input type="hidden" name="idkhuvuc" value="@kv" />
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Số thứ tự</th>
+                <th>Tên đệm</th>
+                <th>Tên</th>
+                <th>Ghi chú</th>
+                @*<th>Khu vực</th>
+                    <th>Đại hội</th>*@
+                <th>Bỏ phiếu</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr onclick="toggleCheckbox(this)">
+                    <td>@item.ID</td>
+                    <td>@item.Dem</td>
+                    <td>@item.Ten</td>
+                    <th>@item.GhiChu</th>
+                    <td>
+                        <input type="checkbox" name="selectedCandidates" value="@item.ID" checked/>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Nhập nhanh</h3>
+    <div class="form-group">
+        <label for="numberOfCopies">Nhập số phiếu giống:</label>
+        <input type="number" class="form-control" name="numberOfCopies" min="1" value="1" />
+    </div>
+    @*<input type="submit" name="quickSubmit" value="Nhập nhanh" class="btn btn-success" />*@
+    <div class="button-group">
+        <a href="@Url.Action("Index", "Home", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="btn btn-secondary">Quay lại</a>
+        <input type="submit" name="quickSubmit" value="Nhập nhanh" class="btn btn-success" />
+    </div>
+}
+
+@*<p>
+        <a href="@Url.Action("Index", "Home", new { iddaihoi = ViewBag.IDDaiHoi, idkhuvuc = ViewBag.IDKhuVuc })" class="btn btn-secondary">Quay lại</a>
+    </p>*@
+<style>
+    .button-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-start;
+    }
+</style>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+
+
+
+
+<!-- Modal HTML -->
+
+<style>
+    .button-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-start;
+    }
+</style>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Thông báo lỗi</h5>
+                <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- JavaScript để hiển thị modal nếu có lỗi -->
+<script>
+    $(document).ready(function () {
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>$('#errorModal').modal('show');</text>
+        }
+    });
+    function closeModal() {
+        $('#errorModal').modal('hide'); // Đóng modal
+    }
+    function toggleCheckbox(row) {
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+        }
+    }
+</script>
+

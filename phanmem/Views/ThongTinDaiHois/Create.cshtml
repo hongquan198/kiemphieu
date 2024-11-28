@@ -1,0 +1,221 @@
+﻿@model v2kp.Models.ThongTinDaiHoi
+
+@{
+    ViewBag.Title = "Tạo Thông Tin Đại Hội";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mb-4">Tạo thông tin đại hội</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+
+        <!-- Section: Thông Tin Đại Hội -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Thông tin đại hội</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.IdDaiHoi, new { Value = ViewBag.IdDaiHoi })
+                            @Html.Label("Tên đại hội", new { @class = "form-label" })
+                            <input type="text" class="form-control" value="@ViewBag.TenDaiHoi" readonly />
+                            <input type="hidden" name="IdDaiHoi" value="@ViewBag.IdDaiHoi" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.KhuVuc, new { Value = ViewBag.IdKhuVuc })
+                            @Html.Label("Khu vực", new { @class = "form-label" })
+                            <input type="text" class="form-control" value="@ViewBag.TenKhuVuc" readonly />
+                            <input type="hidden" name="KhuVuc" value="@ViewBag.IdKhuVuc" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Loại đại hội:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="CongressOfDelegates" name="CongressType" value="Đại hội đại biểu" />
+                        <label class="form-check-label" for="CongressOfDelegates">Đại hội đại biểu</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="PartyCongress" name="CongressType" value="Đại hội đảng viên" />
+                        <label class="form-check-label" for="PartyCongress">Đại hội đảng viên</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Số Người Tham Dự -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Số người tham gia</h5>
+
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.NumberOfVoters, "Số người cần bầu", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+
+                        @Html.EditorFor(m => m.NumberOfVoters, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.TotalDelegates, "Tổng số đại biểu (đảng viên) được triệu tập", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.TotalDelegates, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.DelegatesPresent, "Trong đó đại biểu (đảng viên) chính thức được triệu tập", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.DelegatesPresent, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.DelegatesPresentOfficial, "Số đại biểu (đảng viên) có mặt", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.DelegatesPresentOfficial, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.OfficialDelegatesPresent, "Trong đó số đại biểu (đảng viên) chính thức có mặt", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.OfficialDelegatesPresent, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.DelegatesDisqualified, "Số đại biểu (đảng viên) bị bác tư cách", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.DelegatesDisqualified, new { htmlAttributes = new { @class = "form-control", min = "0", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.OfficialDelegatesDisqualified, "Trong đó số đại biểu (đảng viên) chính thức bị bác tư cách", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.OfficialDelegatesDisqualified, new { htmlAttributes = new { @class = "form-control", min = "0", required = "required" } })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.DelegatesAbsent, "Số đại biểu (đảng viên) vắng mặt trong suốt thời gian đại hội", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.DelegatesAbsent, new { htmlAttributes = new { @class = "form-control", min = "0", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.OfficialDelegatesAbsent, "Trong đó số đại biểu (đảng viên) chính thức vắng mặt suốt thời gian đại hội", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.OfficialDelegatesAbsent, new { htmlAttributes = new { @class = "form-control", min = "0", required = "required" } })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.DelegatesPresentDuringVoting, "Số đại biểu (đảng viên) có mặt khi bầu cử", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.DelegatesPresentDuringVoting, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.OfficialDelegatesPresentDuringVoting, "Trong đó số đại biểu (đảng viên) chính thức có mặt khi bầu cử", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.OfficialDelegatesPresentDuringVoting, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Section: Thống Kê Phiếu Bầu -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Thống kê phiếu bầu</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.SoPhieuPhatRa, "Số phiếu phát ra", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.SoPhieuPhatRa, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.SoPhieuThuVao, "Số phiếu thu vào", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.SoPhieuThuVao, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.SoPhieuHopLe, "Số phiếu hợp lệ", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.SoPhieuHopLe, new { htmlAttributes = new { @class = "form-control", min = "1", required = "required" } })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(m => m.SoPhieuKhongHopLe, "Số phiếu không hợp lệ", new { @class = "form-label" })
+                        <span class="text-danger align-middle">*</span>
+                        @Html.EditorFor(m => m.SoPhieuKhongHopLe, new { htmlAttributes = new { @class = "form-control", min = "0", required = "required" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+            <input type="submit" value="Tạo thông tin đại hội" class="btn btn-primary me-2" />
+            <a href="@Url.Action("Index", "Home", new { iddaihoi = ViewBag.IdDaiHoi, idkhuVuc = ViewBag.IdKhuVuc })" class="btn btn-secondary">Quay lại</a>
+        </div>
+
+    </div>
+}
+
+
+
+@{
+    // Kiểm tra xem có thông báo lỗi trong TempData không
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <!-- Modal lỗi -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Thông báo lỗi</h5>
+                    <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        @errorMessage
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kích hoạt modal khi có thông báo lỗi -->
+    <script>
+        $(document).ready(function () {
+            $('#errorModal').modal('show');
+        });
+        function closeModal() {
+            $('#errorModal').modal('hide'); // Đóng modal
+        }
+    </script>
+}

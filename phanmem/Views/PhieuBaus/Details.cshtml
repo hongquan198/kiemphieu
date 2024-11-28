@@ -1,0 +1,35 @@
+﻿@model v2kp.Models.PhieuBau
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PhieuBau</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IsCheck)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsCheck)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DaiHoi.TenDaiHoi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DaiHoi.TenDaiHoi)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

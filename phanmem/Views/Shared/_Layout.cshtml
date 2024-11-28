@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <!-- Styles -->
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+
+        /* General Styling */
+        *{
+            box-sizing:border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url("/Content/img/background-trong-dong.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* Đảm bảo ảnh nền bao phủ toàn bộ */
+            background-attachment: fixed; /* Cố định ảnh nền khi scroll */
+        }
+       /* body {
+            background-image: url("img/background-trong-dong.png");
+            background-repeat: no-repeat;
+            background-position-x: center;
+           
+            background-size: 100% auto;
+        }*/
+    
+
+        .body-content {
+            flex: 1;
+          
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+            footer a {
+                color: #ffc107;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Navbar */
+        .hover-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 5px 10px;
+            right: 0;
+            top: 100%;
+            z-index: 1000;
+            width: 150px;
+        }
+
+            .hover-menu ul li a {
+                color: black; /* Màu chữ đen */
+                background-color: white; /* Nền trắng */
+                text-decoration: none; /* Không có gạch dưới */
+                padding: 5px 10px;
+                display: block;
+            }
+
+                .hover-menu a:hover {
+                    color: black; /* Giữ nguyên màu chữ */
+                    background-color: white; /* Giữ nguyên nền */
+                    text-decoration: none; /* Không có thay đổi khi hover */
+                }
+
+
+        .navbar-text:hover .hover-menu {
+            display: block;
+        }
+
+        .btn-link {
+            padding: 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-danger shadow-sm">
+        <div class="container-fluid d-flex justify-content-between">
+            <!-- Logo -->
+            <a class="navbar-brand" href="@Url.Action("Index", "DaiHois", new { id = Session["KhuVuc"] ?? 0 })">
+                <img src="~/Content/img/logo.png" alt="Logo" style="height: 50px;" />
+                Hệ thống hỗ trợ kiểm phiếu Đại hội Đảng
+            </a>
+
+            <!-- User Menu -->
+            <div class="navbar-text position-relative">
+                <span class="fs-5 fw-normal text-white">
+                    Xin chào, @Session["Username"]
+                </span>
+                <div class="hover-menu" style="width:180px;">
+                    <ul class="list-unstyled mb-0">
+                        @if (Session["Role"]?.ToString() == "Admin" @*&& Session["KhuVuc"]?.ToString() == "0"*@)
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Accounts")" style="color:black">Quản lý tài khoản</a>
+                            </li>
+                            if (Session["KhuVuc"]?.ToString() == "0")
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "KhuVucs")" style="color:black">Quản lý khu vực</a>
+                                </li>
+                            }
+                        }
+                        <li>
+                            @using (Html.BeginForm("Logout", "Accounts", FormMethod.Post, new { @class = "logout-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn text-dark">Đăng xuất</button>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container body-content py-4">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class=" bg-danger">
+        <div class="footer-content">
+            <p>&copy; 2024 Hệ thống hỗ trợ kiểm phiếu Đại hội Đảng.</p>
+            @*<p>
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            </p>*@
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

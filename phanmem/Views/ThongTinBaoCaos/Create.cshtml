@@ -1,0 +1,88 @@
+﻿@model v2kp.Models.ThongTinBaoCao
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="container" style="max-width: 500px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+    <h3 class="text-center" style="font-weight: bold; margin-bottom: 20px;">Nhập thông tin báo cáo kết quả kiểm phiếu</h3>
+
+    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <div style="flex: 1;">
+            <label>Tên đại hội</label>
+            <input type="text" class="form-control" value="@ViewBag.TenDaiHoi" readonly style="background-color: #f1f1f1;" />
+            <input type="hidden" name="IdDaiHoi" value="@ViewBag.IdDaiHoi" />
+        </div>
+        <div style="flex: 1;">
+            <label>Khu vực</label>
+            <input type="text" class="form-control" value="@ViewBag.TenKhuVuc" readonly style="background-color: #f1f1f1;" />
+            <input type="hidden" name="KhuVuc" value="@ViewBag.IdKhuVuc" />
+        </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.TenToChucDang, "Tên tổ chức đảng")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.TenToChucDang, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.DaiHoiLanThu, "Đại hội lần thứ")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.DaiHoiLanThu, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.NhiemKy, "Nhiệm kỳ")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.NhiemKy, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.ThoiGianGhiBienBan, "Thời gian ghi biên bản: Giờ phút")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.ThoiGianGhiBienBan, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.ThoiGian, "Thời gian")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.ThoiGian, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.TruongBanKiemPhieu, "Trưởng ban kiểm phiếu")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.TruongBanKiemPhieu, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        @Html.LabelFor(m => m.ThuKy, "Thư ký")
+        <span class="text-danger align-middle">*</span>
+        @Html.EditorFor(m => m.ThuKy, new { htmlAttributes = new { @class = "form-control", style = "background-color: #f1f1f1;" } })
+    </div>
+
+    <div class="form-group text-center" style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+        <input type="submit" value="Tạo thông tin báo cáo" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; width: 60%;" />
+        <a href="@Url.Action("Index", "Home", new { iddaihoi = ViewBag.IdDaiHoi, idkhuVuc = ViewBag.IdKhuVuc })" class="btn btn-secondary" style="width: 30%;">Quay lại</a>
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

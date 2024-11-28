@@ -1,0 +1,155 @@
+﻿@model IEnumerable<v2kp.Models.ThongTinBaoCao>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <!-- Back Button -->
+    <p>
+        @if (Model.Any())
+        {
+            var firstItem = Model.First();
+            <a href="@Url.Action("Index", "Home", new { iddaihoi = firstItem.IDDaiHoi, idkhuvuc = firstItem.KhuVuc })" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        }
+    </p>
+
+    <!-- Card List -->
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-content">
+                <div class="field">
+                    <span class="label">Tên tổ chức đảng</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.TenToChucDang)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Đại hội lần thứ</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.DaiHoiLanThu)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Nhiệm kì</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.NhiemKy)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Thời gian ghi biên bản:Giờ/phút</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.ThoiGianGhiBienBan)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Thời gian</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.ThoiGian)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Trưởng ban kiểm phiếu</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.TruongBanKiemPhieu)</span>
+                </div>
+                <div class="field">
+                    <span class="label">Thư ký</span>
+                    <span class="value">@Html.DisplayFor(modelItem => item.ThuKy)</span>
+                </div>
+                <div class="divider"></div>
+                <div class="edit-button-container">
+                    <a href="@Url.Action("Edit", new { iddaihoi = item.IDDaiHoi, idkhuvuc = item.KhuVuc })" class="btn-edit">
+                        <i class="fas fa-edit"></i> Sửa
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Include Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+    /*body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }*/
+
+    /*.container {
+        max-width: 640px;
+        width: 100%;
+    }*/
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background-color: #e5e7eb;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #374151;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background-color: #d1d5db;
+        }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 16px;
+        padding: 16px;
+    }
+
+    .card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #6b7280;
+    }
+
+    .value {
+        color: #111827;
+        font-size: 16px;
+    }
+
+    .divider {
+        border-top: 1px solid #e5e7eb;
+        margin: 8px 0;
+    }
+
+    .edit-button-container {
+        text-align: center;
+    }
+
+    .btn-edit {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background-color: #eff6ff;
+        border: 1px solid #3b82f6;
+        border-radius: 4px;
+        color: #3b82f6;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #e0f2fe;
+        }
+</style>

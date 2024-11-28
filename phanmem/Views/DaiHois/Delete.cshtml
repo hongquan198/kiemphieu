@@ -1,0 +1,72 @@
+﻿@model v2kp.Models.DaiHoi
+
+@{
+    ViewBag.Title = "Xác nhận xóa đại hội";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="confirm-delete-container" style="max-width: 400px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
+    <h3 style="text-align: center; color: #333; margin-bottom: 15px;">Xác nhận xóa đại hội</h3>
+    <p style="text-align: center; color: #555;">Bạn có chắc chắn muốn xóa đại hội này?</p>
+
+    <div class="delete-details" style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <div class="detail-item" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <i class="fa fa-flag" aria-hidden="true" style="color: #333; margin-right: 8px;"></i>
+            <span style="color: #666; font-weight: bold; margin-right: 5px;">Tên đại hội:</span>
+            <span style="color: #333;">@Html.DisplayFor(model => model.TenDaiHoi)</span>
+        </div>
+        <div class="detail-item" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <i class="fa fa-map-marker" aria-hidden="true" style="color: #333; margin-right: 8px;"></i>
+            <span style="color: #666; font-weight: bold; margin-right: 5px;">Khu vực:</span>
+            <span style="color: #333;">@Html.DisplayFor(model => model.KhuVuc.KhuVuc1)</span>
+        </div>
+        <div class="detail-item" style="display: flex; align-items: center;">
+            <i class="fa fa-calendar" aria-hidden="true" style="color: #333; margin-right: 8px;"></i>
+            <span style="color: #666; font-weight: bold; margin-right: 5px;">Thời gian:</span>
+            @{
+                var thoiGian = Model.ThoiGian?.ToString("dd/MM/yyyy") ?? "Không có thời gian";
+            }
+            <span style="color: #333;">@thoiGian</span>
+            @*<span style="color: #333;">@Html.DisplayFor(model => model.ThoiGian)</span>*@
+        </div>
+
+
+
+        <div class="detail-item" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <i class="fa fa-info-circle" aria-hidden="true" style="color: #333; margin-right: 8px;"></i>
+            <span style="color: #666; font-weight: bold; margin-right: 5px;">Trạng thái:</span>
+            <span style="color: #333;">
+                @if (Model.TrangThai.HasValue)
+                {
+                    if (Model.TrangThai.Value)
+                    {
+                        @:Đang hoạt động
+                    }
+                    else
+                    {
+                        @:Đã kết thúc
+                    }
+                }
+                else
+                {
+                    @:Chưa xác định
+                }
+            </span>
+        </div>
+
+
+
+
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="@Url.Action("Index", new { id = ViewBag.IDKhuVuc })" class="btn" style="background-color: #f0f0f0; color: #333; border: 1px solid #ddd; padding: 8px 20px; text-decoration: none; border-radius: 5px;">Quay lại</a>
+            <button type="submit" class="btn" style="background-color: #dc3545; color: #fff; border: none; padding: 8px 20px; border-radius: 5px;">Xác nhận xóa</button>
+        </div>
+    }
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">

@@ -1,0 +1,67 @@
+﻿@model v2kp.Models.ThongTinBaoCao
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ThongTinBaoCao</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenToChucDang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenToChucDang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DaiHoiLanThu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DaiHoiLanThu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThoiGian)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThoiGian)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TruongBanKiemPhieu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TruongBanKiemPhieu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThuKy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThuKy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThongTinDaiHoi.CongressType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThongTinDaiHoi.CongressType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

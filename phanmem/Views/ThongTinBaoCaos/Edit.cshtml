@@ -1,0 +1,160 @@
+﻿@model v2kp.Models.ThongTinBaoCao
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="top">
+    <div class="card">
+
+
+        <div class="header">
+            <h2>Thông tin báo cáo</h2>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label>Tên đại hội</label>
+                    <input type="text" class="form-control full-width" value="@ViewBag.TenDaiHoi" readonly />
+                    <input type="hidden" name="IdDaiHoi" value="@ViewBag.IdDaiHoi" />
+                </div>
+
+                <div class="form-group">
+                    <label>Khu vực</label>
+                    <input type="text" class="form-control full-width" value="@ViewBag.TenKhuVuc" readonly />
+                    <input type="hidden" name="KhuVuc" value="@ViewBag.IdKhuVuc" />
+                </div>
+
+                <div class="form-group">
+                    <label>Tên tổ chức đảng</label>
+                    @Html.EditorFor(model => model.TenToChucDang, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.TenToChucDang, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label>Đại hội lần thứ</label>
+                    @Html.EditorFor(model => model.DaiHoiLanThu, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.DaiHoiLanThu, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Nhiệm kì</label>
+                    @Html.EditorFor(model => model.NhiemKy, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.NhiemKy, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label>Thời gian ghi biên bản: Giờ/phút</label>
+                    @Html.EditorFor(model => model.ThoiGianGhiBienBan, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.ThoiGianGhiBienBan, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label>Thời gian địa điểm</label>
+                    @Html.EditorFor(model => model.ThoiGian, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.ThoiGian, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label>Trưởng ban kiểm phiếu</label>
+                    @Html.EditorFor(model => model.TruongBanKiemPhieu, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.TruongBanKiemPhieu, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label>Thư ký</label>
+                    @Html.EditorFor(model => model.ThuKy, new { htmlAttributes = new { @class = "form-control full-width" } })
+                    @Html.ValidationMessageFor(model => model.ThuKy, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="button-group">
+                    <input type="submit" value="Lưu" class="btn btn-primary full-width" />
+                </div>
+            }
+        </div>
+        <div class="header">
+            <a href="@Url.Action("Index", new { iddaihoi = ViewBag.IdDaiHoi, idkhuVuc = ViewBag.IdKhuVuc })" class="btn btn-secondary full-width">Quay lại</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    .top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f9fafb;
+        padding: 20px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 600px; /* Increased width */
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .header {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .content {
+        margin-top: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #1f2937;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-control,
+    .btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .full-width {
+        width: 100%;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        color: #ffffff;
+        font-weight: bold;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+    .btn-secondary {
+        background-color: #e2e8f0;
+        color: #4a5568;
+        font-weight: bold;
+        border: none;
+        text-align: center;
+    }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+</style>

@@ -1,0 +1,341 @@
+﻿@model IEnumerable<v2kp.Models.UngCuVien>
+
+@{
+    ViewBag.Title = "Danh sách Ứng cử viên (Chỉnh sửa trực tiếp với ID)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .sortable {
+        cursor: pointer;
+    }
+
+        .sortable .fa-sort {
+            margin-left: 5px;
+        }
+
+        .sortable.sorted-asc .fa-sort {
+            transform: rotate(180deg);
+        }
+
+        .sortable.sorted-desc .fa-sort {
+            transform: rotate(0deg);
+        }
+</style>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Danh sách ứng cử viên</h2>
+    <div class="d-flex justify-content-between action-buttons mb-3">
+        @*<button id="addRowButton" class="btn btn-success">
+            <i class="fas fa-plus"></i> Thêm dòng mới
+        </button>*@
+        <!-- Nút tải file mẫu -->
+        <button id="downloadTemplateButton" class="btn btn-info">
+            <i class="fas fa-download"></i> Tải file mẫu
+        </button>
+        <button id="backButton" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại
+        </button>
+    </div>
+    <!-- Bảng dữ liệu -->
+    <table id="editableTable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="sortable" data-column="ID">STT <i class="fas fa-sort"></i></th>
+                <th class="sortable" data-column="Dem">Họ và tên đệm<i class="fas fa-sort"></i></th>
+                <th class="sortable" data-column="Ten">Tên<i class="fas fa-sort"></i></th>
+                <th class="sortable" data-column="GhiChu">Ghi chú<i class="fas fa-sort"></i></th>
+                <th style="display:none;">IDDaiHoi</th>
+                <th style="display:none;">IDKhuVuc</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td contenteditable="false" data-column="ID">@item.ID</td>
+                        <td contenteditable="true" data-column="Dem">@item.Dem</td>
+                        <td contenteditable="true" data-column="Ten">@item.Ten</td>
+                        <td contenteditable="true" data-column="GhiChu">@item.GhiChu</td>
+                        <td contenteditable="false" data-column="IDDaiHoi" style="display:none;">@ViewBag.IDDaiHoi</td>
+                        <td contenteditable="false" data-column="KhuVuc" style="display:none;">@ViewBag.IDKhuVuc</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger btn-sm delete-row">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+            <tr class="add-new-row">
+                <td contenteditable="true" data-column="ID"></td>
+                <td contenteditable="true" data-column="Dem"></td>
+                <td class="text-center">
+                      <button type="button" class="btn btn-success btn-sm add-row">
+                          <i class="fas fa-plus"></i>
+                      </button>
+                </td>
+                <td contenteditable="true" data-column="Ten"></td>
+                <td contenteditable="true" data-column="GhiChu"></td>
+                <td contenteditable="false" data-column="IDDaiHoi" style="display:none;">@ViewBag.IDDaiHoi</td>
+                <td contenteditable="false" data-column="KhuVuc" style="display:none;">@ViewBag.IDKhuVuc</td>
+              
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Nút thêm mới và lưu -->
+    <div class="d-flex justify-content-between">
+        @*<button id="addRowButton" class="btn btn-success">
+            <i class="fas fa-plus"></i> Thêm dòng mới
+        </button>*@
+
+        <button id="showImportFormButton" class="btn btn-primary">Tải lên</button>
+        <button id="saveButton" class="btn btn-primary">
+            <i class="fas fa-save"></i> Lưu
+        </button>
+        <!-- Nút tải file mẫu -->
+        @*<button id="downloadTemplateButton" class="btn btn-info">
+            <i class="fas fa-download"></i> Tải file mẫu
+        </button>*@
+    </div>
+
+    <div class="mt-4" id="importFormDiv" style="display: none;">
+        <form id="importForm" enctype="multipart/form-data" method="post" action="/UngCuViens/Import">
+            <input type="hidden" name="IDDaiHoi" value="@ViewBag.IDDaiHoi" />
+            <input type="hidden" name="IDKhuVuc" value="@ViewBag.IDKhuVuc" />
+            <div class="input-group">
+                <input type="file" id="fileInput" name="file" accept=".xlsx" class="form-control" required />
+                <button type="submit" class="btn btn-secondary">Tải lên</button>
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+    const table = $("#editableTable");
+
+    // Lấy giá trị của IDDaiHoi và IDKhuVuc từ Razor
+    const idDaiHoi = '@ViewBag.IDDaiHoi';
+    const idKhuVuc = '@ViewBag.IDKhuVuc';
+
+    // Thêm dòng mới
+    //$("#addRowButton").click(function () {
+    //    const row = $("<tr>").append(`
+    //        <td contenteditable="true" data-column="ID"></td>
+    //        <td contenteditable="true" data-column="Dem"></td>
+    //        <td contenteditable="true" data-column="Ten"></td>
+    //        <td contenteditable="true" data-column="GhiChu"></td>
+    //        <td contenteditable="false" data-column="IDDaiHoi" style="display:none;">${idDaiHoi}</td>
+    //        <td contenteditable="false" data-column="KhuVuc" style="display:none;">${idKhuVuc}</td>
+    //        <td class="text-center">
+    //            <button type="button" class="btn btn-danger btn-sm delete-row">
+    //                <i class="fas fa-trash-alt"></i>
+    //            </button>
+    //        </td>
+    //    `);
+    //    table.append(row);
+    //});
+
+    // Xóa dòng
+    //table.on("click", ".delete-row", function () {
+    //    $(this).closest("tr").remove();
+    //    saveData();
+        //});
+
+        // xóa dữ liệu
+        table.on("click", ".delete-row", function () {
+            const row = $(this).closest("tr");
+            const id = row.find('[data-column="ID"]').text().trim();
+            const idDaiHoi = row.find('[data-column="IDDaiHoi"]').text().trim();
+            const idKhuVuc = row.find('[data-column="KhuVuc"]').text().trim();
+
+            if (id && idDaiHoi && idKhuVuc) {
+                if (confirm("Bạn có chắc chắn muốn xóa bản ghi này?")) {
+                    $.ajax({
+                        url: "/UngCuViens/Delete",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            ID: parseInt(id),
+                            IDDaiHoi: parseInt(idDaiHoi),
+                            IDKhuVuc: parseInt(idKhuVuc)
+                        }),
+                        success: function (response) {
+                            alert(response.message);
+                            if (response.message.includes("thành công")) {
+                                row.remove(); // Xóa dòng khỏi bảng nếu xóa thành công
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Lỗi:", error);
+                            alert("Có lỗi xảy ra: " + xhr.responseText);
+                        }
+                    });
+                }
+            } else {
+                alert("Không thể xác định bản ghi để xóa.");
+            }
+        });
+        // bấm tải lên
+        $(document).ready(function () {
+            // Khi bấm nút "Tải lên"
+            $("#showImportFormButton").click(function () {
+                // Hiển thị div chứa form
+                $("#importFormDiv").fadeIn();
+                // Ẩn nút tải lên sau khi đã nhấn
+                $(this).hide();
+            });
+        });
+        //nút quay lại
+        $("#backButton").click(function () {
+            // Chuyển hướng người dùng đến trang Index (hoặc trang chủ của bạn)
+            window.location.href = `/Home/Index?iddaihoi=${idDaiHoi}&idkhuvuc=${idKhuVuc}`;
+        });
+
+        // Tải file mẫu
+        $("#downloadTemplateButton").click(function () {
+            // Tải file mẫu từ controller
+            window.location.href = '/UngCuViens/DownloadSample?iddaihoi=' + idDaiHoi + '&idkhuvuc=' + idKhuVuc;
+        });
+
+
+        //sắp xếp
+        $(document).ready(function () {
+            const table = $("#editableTable");
+
+            // Hàm sắp xếp dữ liệu
+            function sortTable(column, order) {
+                const rows = table.find("tbody tr").not(".add-new-row").get(); // Bỏ qua dòng có class 'add-new-row'
+
+                rows.sort(function (a, b) {
+                    const valA = $(a).find(`[data-column="${column}"]`).text().trim().toLowerCase();
+                    const valB = $(b).find(`[data-column="${column}"]`).text().trim().toLowerCase();
+
+                    if ($.isNumeric(valA) && $.isNumeric(valB)) {
+                        return (order === "asc" ? valA - valB : valB - valA);
+                    }
+
+                    return (order === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA));
+                });
+
+                // Cập nhật lại thứ tự các dòng
+                $.each(rows, function (index, row) {
+                    table.children("tbody").append(row);
+                });
+
+                // Đảm bảo dòng thêm mới luôn ở cuối
+                const addNewRow = table.find("tbody tr.add-new-row");
+                table.children("tbody").append(addNewRow);
+            }
+
+
+            // Sự kiện khi nhấp vào tiêu đề cột
+            table.on("click", ".sortable", function () {
+                const column = $(this).data("column");
+                const currentOrder = $(this).hasClass("sorted-asc") ? "asc" : "desc";
+                const newOrder = currentOrder === "asc" ? "desc" : "asc";
+
+                // Xóa trạng thái sắp xếp cũ trên các cột khác
+                table.find(".sortable").removeClass("sorted-asc sorted-desc");
+
+                // Đặt trạng thái mới cho cột hiện tại
+                $(this).addClass(newOrder === "asc" ? "sorted-asc" : "sorted-desc");
+
+                // Thực hiện sắp xếp
+                sortTable(column, newOrder);
+            });
+        });
+        // thêm ngay trong bảng
+        $(document).ready(function () {
+        const table = $("#editableTable");
+
+        // Lấy giá trị của IDDaiHoi và IDKhuVuc từ Razor
+        const idDaiHoi = '@ViewBag.IDDaiHoi';
+        const idKhuVuc = '@ViewBag.IDKhuVuc';
+
+        // Xử lý khi nhấn nút thêm dòng mới
+        table.on("click", ".add-row", function () {
+            const newRow = `
+                <tr>
+                    <td contenteditable="true" data-column="ID"></td>
+                    <td contenteditable="true" data-column="Dem"></td>
+                    <td contenteditable="true" data-column="Ten"></td>
+                    <td contenteditable="true" data-column="GhiChu"></td>
+                    <td contenteditable="false" data-column="IDDaiHoi" style="display:none;">${idDaiHoi}</td>
+                    <td contenteditable="false" data-column="KhuVuc" style="display:none;">${idKhuVuc}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm delete-row">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            // Thêm dòng mới ngay trên dòng cuối cùng
+            $(this).closest("tr").before(newRow);
+        });
+        });
+
+
+        // Lưu dữ liệu
+        $("#saveButton").click(function () {
+            saveData();
+        });
+
+        function saveData() {
+            const data = [];
+            $("#editableTable tbody tr").each(function () {
+                const id = $(this).find('[data-column="ID"]').text().trim();
+                const dem = $(this).find('[data-column="Dem"]').text().trim();
+                const ten = $(this).find('[data-column="Ten"]').text().trim();
+                const ghichu = $(this).find('[data-column="GhiChu"]').text().trim();
+                const idDaiHoi = $(this).find('[data-column="IDDaiHoi"]').text().trim();
+                const idKhuVuc = $(this).find('[data-column="KhuVuc"]').text().trim();
+
+                if (id !== "" && dem !== "" && ten !== "") { // Kiểm tra không có dòng rỗng
+                    data.push({
+                        ID: parseInt(id),
+                        Dem: dem,
+                        Ten: ten,
+                        GhiChu: ghichu,
+                        IDDaiHoi: parseInt(idDaiHoi),
+                        KhuVuc: parseInt(idKhuVuc)
+                    });
+                }
+            });
+
+            // Gửi dữ liệu qua AJAX với jQuery
+            $.ajax({
+                url: "/UngCuViens/Save", // Đảm bảo đường dẫn đúng
+                type: "POST",
+                contentType: "application/json",
+         /*       data: JSON.stringify(data),*/
+                data: JSON.stringify({
+                    data: JSON.stringify(data),
+                    IDDaiHoi: idDaiHoi,  // Truyền đúng giá trị
+                    IDKhuVuc: idKhuVuc   // Truyền đúng giá trị
+                }),
+                success: function (response) {
+                    alert(response.message);
+                    location.reload(); // Tải lại trang sau khi lưu thành công
+                },
+                error: function (xhr, status, error) {
+                    console.error("Lỗi:", error);
+                    console.error("Mã lỗi:", xhr.status);
+                    console.error("Thông báo lỗi:", xhr.statusText);
+                    console.error("Chi tiết lỗi:", xhr.responseText);  // Lấy chi tiết lỗi từ phản hồi
+
+                    // Hiển thị thông báo lỗi cho người dùng
+                    alert("Có lỗi xảy ra: " + xhr.status + " - " + xhr.statusText+ " - " + xhr.responseText);
+                }
+            });
+        }
+    });
+
+</script>

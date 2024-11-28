@@ -1,0 +1,143 @@
+﻿@model v2kp.Models.DaiHoi
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm mới Đại Hội</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /*body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }*/
+
+        .top {
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            border-color: #6c757d;
+            color: #333;
+        }
+
+            .btn-secondary:hover {
+                background-color: #e2e6ea;
+                border-color: #5a6268;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="top">
+        <h2 class="title">Thêm mới đại hội</h2>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ID,"STT", new { @class = "control-label" })
+                @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập ID" } })
+                @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TenDaiHoi, "Tên đại hội", new { @class = "control-label" })
+                @Html.EditorFor(model => model.TenDaiHoi, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên đại hội" } })
+                @Html.ValidationMessageFor(model => model.TenDaiHoi, "", new { @class = "text-danger" })
+            </div>
+
+            @*@Html.HiddenFor(model => model.IDKhuVuc, new { Value = ViewBag.IDKhuVuc })*@
+            if (Session["KhuVuc"] != null && Session["KhuVuc"].ToString() == "0" && Session["Role"] != null && Session["Role"].ToString() == "Admin")
+            {
+                <div class="form-group">
+                    <label for="IDKhuVuc">Chọn Khu vực</label>
+                    @Html.DropDownList("IDKhuVuc", (SelectList)ViewBag.KhuVucList, "Chọn khu vực", new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.IDKhuVuc, new { Value = ViewBag.IDKhuVuc })
+            }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ThoiGian, "Thời gian bắt đầu", new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.ThoiGian, new { htmlAttributes = new { @class = "form-control", placeholder = "dd/mm/yyyy", type = "date" } })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="fas fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.ThoiGian, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ThoiGianKetThuc, "Thời gian kết thúc", new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.EditorFor(model => model.ThoiGianKetThuc, new { htmlAttributes = new { @class = "form-control", placeholder = "dd/mm/yyyy", type = "date" } })
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="fas fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.ThoiGianKetThuc, "", new { @class = "text-danger" })
+            </div>
+            // trạng thái
+            <!--<div class="form-group">
+                @Html.LabelFor(model => model.TrangThai, "Trạng thái", new { @class = "control-label" })
+                <div>
+                    @Html.RadioButtonFor(model => model.TrangThai, true) <label>Đang hoạt động</label>
+                    @Html.RadioButtonFor(model => model.TrangThai, false) <label>Đã kết thúc</label>-->
+                    @*@Html.RadioButtonFor(model => model.TrangThai, null) <label>Chưa xác định</label>*@
+                <!--</div>
+                @Html.ValidationMessageFor(model => model.TrangThai, "", new { @class = "text-danger" })
+            </div>-->
+
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Thêm mới" class="btn btn-primary" />
+                <a href="@Url.Action("Index", "DaiHois", new { id = ViewBag.IDKhuVuc })" class="btn btn-secondary ml-2">Quay lại</a>
+            </div>
+        }
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

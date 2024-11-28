@@ -1,0 +1,223 @@
+﻿@model v2kp.Models.ThongTinDaiHoi
+
+@{
+    ViewBag.Title = "Chỉnh sửa thông tin đại hội";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mt-5 mb-5 text-primary" style="font-weight: bold;">Chỉnh sửa thông tin đại hội</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="container">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <!-- Phần 1: Thông tin cơ bản -->
+    <div class="card shadow-lg rounded-3 mb-4 p-4">
+        <h5 class="card-title text-center mb-4">Thông tin cơ bản</h5>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.IdDaiHoi)
+                <div class="form-group">
+                    <label class="form-label text-muted">Id Đại Hội</label>
+                    <input type="text" class="form-control" value="@Model.IdDaiHoi" readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.KhuVuc)
+                <div class="form-group">
+                    <label class="form-label text-muted">Khu Vực</label>
+                    <input type="text" class="form-control" value="@Model.KhuVuc" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CongressType, "Loại đại hội")
+                    @Html.DropDownListFor(model => model.CongressType, new SelectList(
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Đại hội đại biểu", Value = "Đại hội đại biểu" },
+                            new SelectListItem { Text = "Đại hội đảng viên", Value = "Đại hội đảng viên" }
+                        },
+                        "Value", "Text", Model.CongressType),
+                        new { @class = "form-control shadow-sm" })
+                    @Html.ValidationMessageFor(model => model.CongressType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phần 2: Thông tin đại biểu -->
+    <div class="card shadow-lg rounded-3 mb-4 p-4">
+        <h5 class="card-title text-center mb-4">Sửa thông tin đại biểu</h5>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumberOfVoters, "Số người cần bầu")
+                    @Html.EditorFor(model => model.NumberOfVoters, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.NumberOfVoters, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row mb-4">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalDelegates, "Tổng số đại biểu đảng viên được triệu tập")
+                    @Html.EditorFor(model => model.TotalDelegates, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.TotalDelegates, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DelegatesPresent, "Trong đó đại biểu (đảng viên) chính thức được triệu tập")
+                    @Html.EditorFor(model => model.DelegatesPresent, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DelegatesPresent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DelegatesPresentOfficial, "Đại biểu đảng viên chính thức có mặt")
+                    @Html.EditorFor(model => model.DelegatesPresentOfficial, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DelegatesPresentOfficial, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OfficialDelegatesPresent, "Trong đó số đại biểu (đảng viên) chính thức có mặt")
+                    @Html.EditorFor(model => model.OfficialDelegatesPresent, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.OfficialDelegatesPresent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DelegatesDisqualified, "Đại biểu đảng viên bị bác tư cách")
+                    @Html.EditorFor(model => model.DelegatesDisqualified, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "0", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DelegatesDisqualified, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OfficialDelegatesDisqualified, "Đại biểu đảng viên chính thức bị bác tư cách")
+                    @Html.EditorFor(model => model.OfficialDelegatesDisqualified, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "0", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.OfficialDelegatesDisqualified, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DelegatesAbsent, "Đại biểu đảng viên vắng mặt")
+                    @Html.EditorFor(model => model.DelegatesAbsent, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "0", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DelegatesAbsent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OfficialDelegatesAbsent, "Đại biểu đảng viên chính thức vắng mặt")
+                    @Html.EditorFor(model => model.OfficialDelegatesAbsent, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "0", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.OfficialDelegatesAbsent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DelegatesPresentDuringVoting, "Số đại biểu (đảng viên) có mặt khi bầu cử")
+                    @Html.EditorFor(model => model.DelegatesPresentDuringVoting, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DelegatesPresentDuringVoting, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OfficialDelegatesPresentDuringVoting, "Trong đó số đại biểu (đảng viên) chính thức có mặt khi bầu cử")
+                    @Html.EditorFor(model => model.OfficialDelegatesPresentDuringVoting, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.OfficialDelegatesPresentDuringVoting, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Phần 3: Thông tin phiếu bầu -->
+    <div class="card shadow-lg rounded-3 mb-4 p-4">
+        <h5 class="card-title text-center mb-4">Thông tin phiếu bầu</h5>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SoPhieuPhatRa, "Số phiếu phát ra")
+                    @Html.EditorFor(model => model.SoPhieuPhatRa, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.SoPhieuPhatRa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SoPhieuThuVao, "Số phiếu thu vào")
+                    @Html.EditorFor(model => model.SoPhieuThuVao, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.SoPhieuThuVao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SoPhieuHopLe, "Số phiếu hợp lệ")
+                    @Html.EditorFor(model => model.SoPhieuHopLe, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "1", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.SoPhieuHopLe, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SoPhieuKhongHopLe, "Số phiếu không hợp lệ")
+                    @Html.EditorFor(model => model.SoPhieuKhongHopLe, new { htmlAttributes = new { @class = "form-control shadow-sm", min = "0", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.SoPhieuKhongHopLe, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Submit Button -->
+    <div class="d-flex justify-content-between mb-4">
+        <button type="submit" class="btn btn-primary btn-sm">Lưu</button>
+
+        <a href="@Url.Action("Index", "ThongTinDaiHois", new { iddaihoi = ViewBag.IdDaiHoi, idkhuVuc = ViewBag.IdKhuVuc })" class="btn btn-secondary btn-sm">
+            Quay lại
+        </a>
+    </div>
+
+</div>
+}
+
+

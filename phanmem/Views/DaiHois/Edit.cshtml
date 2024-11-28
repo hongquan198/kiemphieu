@@ -1,0 +1,76 @@
+﻿@model v2kp.Models.DaiHoi
+
+@{
+    ViewBag.Title = "Chỉnh sửa Đại Hội";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Sửa thông tin đại hội</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="card p-4 shadow">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
+            <div class="form-group">
+                @Html.LabelFor(model => model.TenDaiHoi, "Tên đại hội")
+                @Html.EditorFor(model => model.TenDaiHoi, new { htmlAttributes = new { @class = "form-control", placeholder = "Tên đại hội" } })
+                @Html.ValidationMessageFor(model => model.TenDaiHoi, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDKhuVuc, "Khu vực")
+                @if (ViewBag.KhuVucName != null)
+                {
+                    <input type="text" class="form-control" value="@ViewBag.KhuVucName" readonly />
+                }
+                else
+                {
+                    <!-- Nếu không có tên khu vực trong ViewBag, thì hiển thị ID -->
+                    @Html.TextBoxFor(model => model.IDKhuVuc, new { @class = "form-control", @readonly = "readonly", placeholder = "Khu vực" })
+                }
+                @Html.ValidationMessageFor(model => model.IDKhuVuc, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ThoiGian, "Thời gian bắt đầu")
+                @Html.TextBoxFor(model => model.ThoiGian, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", placeholder = "dd/mm/yyyy" })
+                @Html.ValidationMessageFor(model => model.ThoiGian, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+               @Html.LabelFor(model => model.ThoiGianKetThuc, "Thời gian kết thúc")
+               @Html.TextBoxFor(model => model.ThoiGianKetThuc, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", placeholder = "dd/mm/yyyy" })
+               @Html.ValidationMessageFor(model => model.ThoiGianKetThuc, "", new { @class = "text-danger" })
+           </div>
+
+             <div class="form-group" style="display:none;">
+                @Html.LabelFor(model => model.TrangThai, "Trạng thái")
+                <div>
+                    @Html.RadioButtonFor(model => model.TrangThai, true, new { style = "display:none;" }) 
+                    <label>Đang hoạt động</label>
+                    @Html.RadioButtonFor(model => model.TrangThai, false, new { style = "display:none;" }) 
+                    <label>Đã kết thúc</label>
+                </div>
+                @Html.ValidationMessageFor(model => model.TrangThai, "", new { @class = "text-danger" })
+            </div>
+
+
+
+            <div class="form-group d-flex">
+                <button type="submit" class="btn btn-success mr-2">
+                    <i class="fas fa-save"></i> Lưu
+                </button>
+                <a href="@Url.Action("Index", "DaiHois", new { id = ViewBag.IDKhuVuc })" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> Quay lại danh sách
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

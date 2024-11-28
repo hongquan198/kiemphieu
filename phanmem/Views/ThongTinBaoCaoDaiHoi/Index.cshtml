@@ -1,0 +1,584 @@
+﻿@model IEnumerable<v2kp.Models.ThongTinBaoCaoDaiHoi>
+@*@model v2kp.Models.ThongTinBaoCaoDaiHoi*@
+
+@{
+    ViewBag.Title = "Thông tin đại biểu dự đại hội";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card {
+        font-size: 0.9rem; /* Giảm font size trong card */
+        padding: 10px;
+    }
+
+    .card-header h5 {
+        font-size: 1.2rem; /* Giảm font size của tiêu đề card */
+    }
+
+    .table {
+        font-size: 0.85rem; /* Giảm kích thước chữ trong bảng */
+    }
+
+        .table td {
+            padding: 8px; /* Giảm padding của các ô trong bảng */
+        }
+
+    .table-bordered {
+        border: 1px solid #dee2e6; /* Thêm border mảnh hơn */
+    }
+
+    .btn {
+        font-size: 0.85rem; /* Giảm font-size của nút */
+        padding: 6px 10px; /* Giảm padding */
+    }
+
+    .col {
+        padding: 0 5px; /* Giảm padding của cột */
+    }
+
+    .w-100 {
+        width: 100% !important; /* Đảm bảo nút bấm chiếm 100% chiều rộng */
+    }
+
+    .d-flex {
+        flex-wrap: wrap; /* Đảm bảo các phần tử con không bị tràn khi kích thước nhỏ */
+    }
+
+    .mb-2 {
+        margin-bottom: 5px; /* Giảm margin dưới */
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    button i {
+        font-size: 1rem; /* Giảm kích thước biểu tượng */
+    }
+</style>
+<h2 class="text-center " style="color: #1a73e8;"> Thông tin đại biểu dự đại hội</h2>
+@if (!(ViewBag.HasRecord ?? false))
+{
+    <button id="navigateButton" class="btn btn-primary px-1 py-1">
+        Tạo thông tin đại hội
+    </button>
+}
+<div class="container mt-3">
+    @foreach (var item in Model)
+    {
+        <!-- Action Button Group -->
+        <div class="text-center mb-4">
+            <div class="d-flex flex-column align-items-center">
+                <div class="d-flex justify-content-between mb-2 w-100">
+                    <div class="col px-1">
+                        <form action="@Url.Action("KetQuaKiemPhieuBauCu", "ThongTinBaoCaos")" method="post" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fa fa-download"></i> Tải về kết quả bầu cử
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col px-1">
+                        <form action="@Url.Action("KetQuaKiemPhieuBauCuView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="fa fa-eye"></i> Xem trước kết quả bầu cử
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2 w-100">
+                    <div class="col px-1">
+                        <form id="downloadForm" action="@Url.Action("DanhSachTrungCu", "ThongTinBaoCaos")" method="post" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <input type="hidden" id="selectedOption" name="selectionOption" value="" />
+                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#actionModalDownload">
+                                <i class="fa fa-download"></i> Tải về danh sách trúng cử
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="col px-1">
+                        <form id="viewForm" action="@Url.Action("DanhSachTrungCuView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="fa fa-eye"></i> Danh sách trúng cử xem trước
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2 w-100">
+                    <div class="col px-1">
+                        <form action="@Url.Action("Chitietphieubau", "ThongTinBaoCaos")" method="post" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fa fa-download"></i> Tải về chi tiết phiếu bầu
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col px-1">
+                        <form action="@Url.Action("ChitietphieubauView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="fa fa-eye"></i> Chi tiết phiếu bầu xem trước
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2 w-100">
+
+                    <div class="col px-1">
+                        <form action="@Url.Action("Phanloaiphieu", "ThongTinBaoCaos")" method="post" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fa fa-download"></i> Tải về phân loại phiếu
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col px-1">
+                        <form action="@Url.Action("PhanloaiphieuView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                            @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                            @Html.Hidden("idkhuvuc", item.KhuVuc)
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="fa fa-eye"></i> Phân loại phiếu xem trước
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
+
+
+
+
+                @if (item.CongressType == "Đại hội đại biểu")
+                {
+                    <div class="d-flex justify-content-between mb-2 w-100">
+
+                        <div class="col px-1">
+                            <form action="@Url.Action("BienBan", "ThongTinBaoCaos")" method="post" id="previewForm_1" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <input type="hidden" name="soban" id="sobanInput_1" value="" />
+                                <button type="button" class="btn btn-success w-100" id="previewButton_1">
+                                    <i class="fa fa-download"></i> Tải về biên bản
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col px-1">
+                            <form action="@Url.Action("BienBanView", "ThongTinBaoCaos")" method="post" target="_blank" id="previewForm_2" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <input type="hidden" name="soban" id="sobanInput_2" value="" />
+                                <button type="button" class="btn btn-outline-secondary w-100" id="previewButton_2">
+                                    <i class="fa fa-eye"></i> Biên bản xem trước
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-between mb-2 w-100">
+
+                        <div class="col px-1">
+                            <form action="@Url.Action("BienBanDV", "ThongTinBaoCaos")" method="post" id="previewForm_3" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <input type="hidden" name="soban" id="sobanInput_3" value="" />
+                                <button type="button" class="btn btn-success w-100" id="previewButton_3">
+                                    <i class="fa fa-download"></i> Tải về biên bản
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col px-1">
+                            <form action="@Url.Action("BienBanDVView", "ThongTinBaoCaos")" method="post" target="_blank" id="previewForm_4" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <input type="hidden" name="soban" id="sobanInput_4" value="" />
+                                <button type="button" class="btn btn-outline-secondary w-100" id="previewButton_4">
+                                    <i class="fa fa-eye"></i> Biên bản xem trước
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+
+
+
+
+
+
+                @if (item.CongressType == "Đại hội đại biểu")
+                {
+                    <div class="d-flex justify-content-between mb-2 w-100">
+                        <div class="col px-1">
+                            <form action="@Url.Action("KhaiBao", "ThongTinBaoCaos")" method="post" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fa fa-download"></i> Tải về khai báo
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col px-1">
+                            <form action="@Url.Action("KhaiBaoView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <button type="submit" class="btn btn-outline-secondary w-100">
+                                    <i class="fa fa-eye"></i> Khai báo xem trước
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-between mb-2 w-100">
+                        <div class="col px-1">
+                            <form action="@Url.Action("KhaiBaoDangVien", "ThongTinBaoCaos")" method="post" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fa fa-download"></i> Tải về khai báo
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col px-1">
+                            <form action="@Url.Action("KhaiBaoDangVienView", "ThongTinBaoCaos")" method="post" target="_blank" class="mx-1">
+                                @Html.Hidden("iddaihoi", item.IDDaiHoi)
+                                @Html.Hidden("idkhuvuc", item.KhuVuc)
+                                <button type="submit" class="btn btn-outline-secondary w-100">
+                                    <i class="fa fa-eye"></i> Khai báo xem trước
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+
+                }
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+
+        <!-- Information Panels -->
+        <div class="row">
+            <!-- Delegate Information Panel -->
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header bg-light text-center">
+                        <h5>Thông tin đại biểu</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr><td>Loại đại hội</td><td>@item.CongressType</td></tr>
+                            <tr><td>Số người cần bầu</td><td>@item.NumberOfVoters</td></tr>
+                            <tr><td>Tổng số đại biểu đảng viên được triệu tập</td><td>@item.TotalDelegates</td></tr>
+                            <tr><td>Tổng số đại biểu đảng viên chính thức được triệu tập</td><td>@item.DelegatesPresent</td></tr>
+                            <tr><td>Đại biểu đảng viên có mặt</td><td>@item.DelegatesPresentOfficial</td></tr>
+                            <tr><td>Đại biểu đảng viên chính thức có mặt</td><td>@item.OfficialDelegatesPresent</td></tr>
+                            <tr><td>Đại biểu đảng viên bị bác tư cách</td><td>@item.DelegatesDisqualified</td></tr>
+                            <tr><td>Đại biểu đảng viên chính thức bị bác tư cách</td><td>@item.OfficialDelegatesDisqualified</td></tr>
+                            <tr><td>Đại biểu đảng viên vắng mặt trong suốt thời gian đại hội</td><td>@item.DelegatesAbsent</td></tr>
+                            <tr><td>Đại biểu đảng viên chính thức vắng mặt trong suốt thời gian đại hội</td><td>@item.OfficialDelegatesAbsent</td></tr>
+                            <tr><td>Đại biểu đảng viên có mặt khi bầu cử</td><td>@item.DelegatesPresentDuringVoting</td></tr>
+                            <tr><td>Đại biểu đảng viên chính thức có mặt khi bầu cử</td><td>@item.OfficialDelegatesPresentDuringVoting</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voting Statistics Panel -->
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header bg-light text-center">
+                        <h5>Thông tin báo cáo</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr><td>Tên tổ chức đảng</td><td>@item.TenToChucDang</td></tr>
+                            <tr><td>Đại hội lần thứ</td><td>@item.DaiHoiLanThu</td></tr>
+                            <tr><td>Nhiệm kỳ</td><td>@item.NhiemKy</td></tr>
+                            <tr><td>Thời gian ghi biên bản</td><td>@item.ThoiGianGhiBienBan</td></tr>
+                            <tr><td>Ngày bầu cử</td><td>@item.ThoiGian</td></tr>
+                            <tr><td>Trưởng ban kiểm phiếu</td><td>@item.TruongBanKiemPhieu</td></tr>
+                            <tr><td>Thư ký</td><td>@item.ThuKy</td></tr>
+                            <tr><td>Số phiếu không hợp lệ</td><td>@item.SoPhieuKhongHopLe</td></tr>
+                            <tr>
+                                <td>Số người tham gia</td>
+                                <td>
+                                    @(
+                                (ViewBag.giaTri1 != null && ViewBag.giaTri2 == null
+                                    ? (ViewBag.giaTri1 > 0 ? ViewBag.giaTri1 : 0)
+                                    : ((ViewBag.giaTri2 ?? 0) > 0 ? ViewBag.giaTri2 : 0))
+                            )
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Button -->
+        <div class="text-right mb-4">
+            @Html.ActionLink("Sửa", "Edit", new { iddaihoi = item.IDDaiHoi, idkhuvuc = item.KhuVuc }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Quay lại", "Index", "Home", new { iddaihoi = item.IDDaiHoi, idkhuvuc = item.KhuVuc }, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal để nhập giá trị -->
+<div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="inputModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inputModalLabel">Nhập số bản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="soban" class="form-label">Số bản:</label>
+                    <input type="number" class="form-control" id="soban" placeholder="Nhập số bản" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*modal 2*@
+<!-- Modal -->
+<!-- Modal HTML Code (your existing modal) -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionModalLabel">Thông tin trúng cử</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung modal sẽ thay đổi tùy thuộc vào lựa chọn -->
+                <div id="modalContent"></div>
+
+                <!-- Các lựa chọn "Tất cả" và "Trúng cử" -->
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selectionOption" value="all" id="selectAll">
+                    <label class="form-check-label" for="selectAll">
+                        Danh sách tất cả ứng viên
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selectionOption" value="trungcu" id="selectTrungCu">
+                    <label class="form-check-label" for="selectTrungCu">
+                        Danh sách ứng cử viên trúng cử
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="confirmAction">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//modal3*@
+<!-- Modal -->
+<div class="modal fade" id="actionModalDownload" tabindex="-1" aria-labelledby="actionModalDownloadLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionModalDownloadLabel">Tải về thông tin trúng cử</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung modal -->
+                <div id="modalContentDownload"></div>
+                <!-- Các lựa chọn -->
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selectionOption" value="all" id="selectAllDownload">
+                    <label class="form-check-label" for="selectAllDownload">
+                        Danh sách tất cả ứng viên
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="selectionOption" value="trungcu" id="selectTrungCuDownload">
+                    <label class="form-check-label" for="selectTrungCuDownload">
+                        Danh sách ứng cử viên trúng cử
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="confirmDownload">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        // Khi người dùng bấm vào nút "Biên bản xem trước"
+        $(document).on('click', '[id^="previewButton_"]', function (e) {
+            // Ngăn chặn form gửi đi
+            e.preventDefault();
+
+            // Lấy id của nút bấm và xác định form tương ứng
+            var buttonId = $(this).attr('id');
+            var formId = buttonId.replace('previewButton', 'previewForm'); // Lấy id form tương ứng
+
+            var sobanInputId = buttonId.replace('previewButton', 'sobanInput'); // Lấy id của sobanInput tương ứng
+
+            // Mở modal và xử lý thông tin
+            $('#inputModal').data('form-id', formId); // Lưu ID form trong modal
+            $('#inputModal').data('soban-input-id', sobanInputId); // Lưu id của sobanInput trong modal
+
+            // Mở modal nhập số bản
+            $('#inputModal').modal('show');
+        });
+
+        // Khi người dùng bấm nút "Lưu" trong modal
+        $(document).on('click', '#submitBtn', function () {
+            // Lấy giá trị nhập vào trong modal
+            var sobanValue = $('#soban').val();
+
+            if (!sobanValue) {
+                alert("Vui lòng nhập số bản.");
+                return;
+            }
+
+            // Lấy ID của form và input cần cập nhật
+            var formId = $('#inputModal').data('form-id');
+            var sobanInputId = $('#inputModal').data('soban-input-id');
+
+            // Cập nhật giá trị vào input tương ứng
+            $('#' + sobanInputId).val(sobanValue);
+
+            // Đóng modal
+            $('#inputModal').modal('hide');
+
+            // Tự động gửi form tương ứng
+            $('#' + formId).submit();
+        });
+        $(document).ready(function () {
+        const idDaiHoi = '@ViewBag.IdDaiHoi';
+        const idKhuVuc = '@ViewBag.IdKhuVuc';
+
+        // Gán sự kiện điều hướng cho nút
+        $("#navigateButton").click(function () {
+            window.location.href = `/ThongTinBaoCaoDaiHoi/Create?iddaihoi=${idDaiHoi}&idkhuvuc=${idKhuVuc}`;
+        });
+
+            $(document).ready(function () {
+                // Khi bấm nút "Danh sách trúng cử xem trước"
+                $('#viewForm').submit(function (e) {
+                    e.preventDefault(); // Ngừng gửi form
+
+                    // Cập nhật nội dung modal với thông tin liên quan
+                    $('#modalContent').html('<p>Bạn muốn xem trước danh sách trúng cử?</p>');
+
+                    // Mở modal
+                    $('#actionModal').modal('show');
+                });
+
+                // Khi bấm nút "Xác nhận" trong modal
+                $('#confirmAction').click(function () {
+                    // Lấy giá trị của radio button được chọn trong modal
+                    var selectedOption = $('input[name="selectionOption"]:checked').val();
+
+                    // Kiểm tra nếu không có lựa chọn
+                    if (!selectedOption) {
+                        alert('Vui lòng chọn một lựa chọn!');
+                        return;
+                    }
+
+                    // Lấy các giá trị ID từ các phần tử hidden input
+                    var idDaiHoi = $('#iddaihoi').val();
+                    var idKhuVuc = $('#idkhuvuc').val();
+
+                    // Gửi dữ liệu tới controller qua AJAX
+                    $.ajax({
+                        url: '/ThongTinBaoCaos/DanhSachTrungCuView',
+                        type: 'POST',
+                        data: {
+                            selectionOption: selectedOption,
+                            iddaihoi: idDaiHoi,
+                            idkhuvuc: idKhuVuc,
+                            // Cũng có thể gửi các tham số khác nếu cần
+                        },
+                        success: function (response) {
+                            console.log(response); // In ra phản hồi để kiểm tra
+                            if (response.viewUrl) {
+                                window.open(response.viewUrl, '_blank'); // Mở file PDF trong tab mới
+                            } else {
+                                alert('Không có URL phản hồi hợp lệ: ' + response.error);
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra trong quá trình gửi yêu cầu.');
+                        }
+                    });
+                });
+            });
+
+
+
+            //tải về
+            document.getElementById("confirmDownload").addEventListener("click", function () {
+                // Kiểm tra lựa chọn của người dùng
+                var selectedOption = document.querySelector('input[name="selectionOption"]:checked');
+
+                if (selectedOption) {
+                    // Nếu có lựa chọn, gán giá trị vào hidden input
+                    document.getElementById("selectedOption").value = selectedOption.value;
+
+                    // Gửi form
+                    document.getElementById("downloadForm").submit();
+                } else {
+                    // Nếu không có lựa chọn, hiển thị thông báo
+                    alert("Vui lòng chọn một lựa chọn để tiếp tục.");
+                }
+            });
+
+
+
+
+    });
+    </script>
+}
+
